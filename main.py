@@ -21,6 +21,12 @@ class MeteorGame(SimpleGame):
 	def render(self, display):
 		self.player.render(display)
 
+	def update(self):
+		if self.is_key_pressed(K_LEFT):
+			self.player.move_left()
+		if self.is_key_pressed(K_RIGHT):
+			self.player.move_right()
+
 def main():
 	game = MeteorGame()
 	game.run()

@@ -48,6 +48,12 @@ class SimpleGame(object):
 		pygame.display.set_caption(self.title)
 		self.font = pygame.font.SysFont("monospace", 16)
 
+	def is_key_pressed(self, key):
+		keys_pressed = pygame.key.get_pressed()
+		if key < 0 or key >= len(keys_pressed):
+			return False
+		return (keys_pressed[key])
+
 	def on_key_up(self, key):
 		pass
 
