@@ -47,6 +47,12 @@ class MeteorGame(SimpleGame):
 				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)))
 				self.meteors.append(self.newMeteor)
 
+		for meteor in self.meteors:
+			if meteor.y > self.window_size[1]:
+				self.meteors.remove(meteor)
+			if ((meteor.y+24 > self.player.y-24) and (self.player.y+24 > meteor.y-24))and  (self.player.x-24 < meteor.x < self.player.x+24):
+				self.meteors.remove(meteor)
+
 def main():
 	game = MeteorGame()
 	game.run()
