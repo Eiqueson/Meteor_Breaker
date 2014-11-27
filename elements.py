@@ -40,4 +40,21 @@ class Player(object):
 	def render(self, display):
 		pygame.draw.rect(display, self.color, pygame.Rect(self.x-self.THICKNESS/2.0, self.y-self.height/2.0, self.THICKNESS, self.height), 3)
 
-###################################		
+###################################
+class Bullet(object):
+	THICKNESS = 5
+	
+	def __init__(self, pos, color, speed, height=15):
+		(self.x, self.y) = pos
+		(self.vx, self.vy) = speed
+		self.height = height
+		self.color = color
+		
+	def move(self, delta_t, player):
+		global score, game_over
+		
+		self.x += self.vx*delta_t
+		self.y -= self.vy*delta_t
+	
+	def render(self, display):
+		pygame.draw.rect(display, self.color, pygame.Rect(self.x-self.THICKNESS/2, self.y-self.height/2, self.THICKNESS, self.height), 0)		
