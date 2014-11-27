@@ -7,7 +7,7 @@ import random
 class MeteorGame(SimpleGame):
 	BLACK = pygame.Color('black')
 	WHITE = pygame.Color('white')
-	COLOR = [pygame.Color('red'), pygame.Color('green'), pygame.Color('blue')]
+	COLOR = [pygame.Color('red'), pygame.Color('green'), pygame.Color('blue'), pygame.Color('yellow')]
 	YELLOW = pygame.Color('yellow')
 	SPEED = [100, 150, 200, 250, 300]
 	
@@ -33,6 +33,19 @@ class MeteorGame(SimpleGame):
 
 		for meteor in self.meteors:
 			meteor.move(1./self.fps)
+
+		if pygame.time.get_ticks() <= 30000:
+			if pygame.time.get_ticks()%self.fps== 0:
+				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)))
+				self.meteors.append(self.newMeteor)
+		elif pygame.time.get_ticks() <= 60000:
+			if pygame.time.get_ticks()%(self.fps/2)== 0:
+				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)))
+				self.meteors.append(self.newMeteor)
+		else:
+			if pygame.time.get_ticks()%(self.fps/4)== 0:
+				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)))
+				self.meteors.append(self.newMeteor)
 
 def main():
 	game = MeteorGame()
