@@ -4,11 +4,12 @@ from gamelib import SimpleGame
 
 
 class Meteor(object):
-	def __init__(self, radius, color, pos, speed):
+	def __init__(self, radius, color, pos, speed, hp):
 		(self.x, self.y) = pos
 		(self.vx, self.vy) = speed
 		self.color = color
 		self.radius = radius
+		self.hp = hp
 		
 	def move(self, delta_t):
 		self.x += self.vx*delta_t
