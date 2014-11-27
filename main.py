@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from gamelib import SimpleGame
-from elements import Player
+from elements import Player, Meteor
 import random
 
 class MeteorGame(SimpleGame):
@@ -14,18 +14,25 @@ class MeteorGame(SimpleGame):
 	def __init__(self):
 		super(MeteorGame, self).__init__('Meteor Breaker', MeteorGame.BLACK)
 		self.player = Player(color=MeteorGame.WHITE,pos=(self.window_size[0]/2, self.window_size[1]-24))
+		self.meteors = [Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)))]
 	
 	def init(self):
 		super(MeteorGame, self).init()
 
 	def render(self, display):
 		self.player.render(display)
+		
+		for meteor in self.meteors:
+			meteor.render(display)
 
 	def update(self):
 		if self.is_key_pressed(K_LEFT):
 			self.player.move_left()
 		if self.is_key_pressed(K_RIGHT):
 			self.player.move_right()
+
+		for meteor in self.meteors:
+			meteor.move(1./self.fps)
 
 def main():
 	game = MeteorGame()

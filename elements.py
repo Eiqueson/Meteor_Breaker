@@ -3,6 +3,21 @@ from pygame.locals import *
 from gamelib import SimpleGame
 
 
+class Meteor(object):
+	def __init__(self, radius, color, pos, speed):
+		(self.x, self.y) = pos
+		(self.vx, self.vy) = speed
+		self.color = color
+		self.radius = radius
+		
+	def move(self, delta_t):
+		self.x += self.vx*delta_t
+		self.y += self.vy*delta_t
+		
+	def render(self, display):
+		pos = (int(self.x),int(self.y))
+		pygame.draw.circle(display, self.color, pos, self.radius, 5)
+
 ###################################
 class Player(object):
 	THICKNESS = 48
