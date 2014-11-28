@@ -16,9 +16,11 @@ class MeteorGame(SimpleGame):
 		self.player = Player(color=MeteorGame.WHITE,pos=(self.window_size[0]/2, self.window_size[1]-24))
 		self.meteors = [Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)), hp=3)]
 		self.bullets = []
+		self.score = 0
 	
 	def init(self):
 		super(MeteorGame, self).init()
+		self.render_score()
 
 	def render(self, display):
 		self.player.render(display)
@@ -29,12 +31,14 @@ class MeteorGame(SimpleGame):
 		for bullet in self.bullets:
 			bullet.render(display)
 
+		display.blit(self.score_image, (360,10))
+
 	def update(self):
 		if self.is_key_pressed(K_LEFT):
 			self.player.move_left()
 		if self.is_key_pressed(K_RIGHT):
 			self.player.move_right()
-		if self.is_key_pressed(K_SPACE) and pygame.time.get_ticks()%3 == 0:
+		if self.is_key_pressed(K_SPACE) and pygame.time.get_ticks()%3 == 0 :
 			self.newBullet = Bullet(pos=(self.player.x, self.player.y-24), color=MeteorGame.YELLOW, speed=(0,500))
 			self.bullets.append(self.newBullet)
 
@@ -46,15 +50,15 @@ class MeteorGame(SimpleGame):
 
 		if pygame.time.get_ticks() <= 30000:
 			if pygame.time.get_ticks()%self.fps == 0:
-				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)), hp=3)
+				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)), hp=10)
 				self.meteors.append(self.newMeteor)
 		elif pygame.time.get_ticks() <= 60000:
 			if pygame.time.get_ticks()%(self.fps/2) == 0:
-				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)), hp=5)
+				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)), hp=10)
 				self.meteors.append(self.newMeteor)
 		else:
 			if pygame.time.get_ticks()%(self.fps/4) == 0:
-				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)), hp=8)
+				self.newMeteor = Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)), hp=10)
 				self.meteors.append(self.newMeteor)
 
 		for meteor in self.meteors:
@@ -68,6 +72,11 @@ class MeteorGame(SimpleGame):
 					meteor.hp -= 1
 					if (meteor.hp == 0):
 						self.meteors.remove(meteor)
+						self.score += 1
+						self.render_score()
+
+	def render_score(self):
+		self.score_image = self.font.render("Score = %d" % self.score, 0, MeteorGame.WHITE)
 
 def main():
 	game = MeteorGame()
