@@ -10,6 +10,7 @@ class Meteor(object):
 		self.color = color
 		self.radius = radius
 		self.hp = hp
+		self.meteor_image = pygame.image.load('meteor1.png')
 		
 	def move(self, delta_t):
 		self.x += self.vx*delta_t
@@ -17,7 +18,8 @@ class Meteor(object):
 		
 	def render(self, display):
 		pos = (int(self.x),int(self.y))
-		pygame.draw.circle(display, self.color, pos, self.radius, 5)
+		#pygame.draw.circle(display, self.color, pos, self.radius/2, 5)
+		display.blit(self.meteor_image, (self.x-24, self.y-24))
 
 ###################################
 class Player(object):
@@ -27,6 +29,7 @@ class Player(object):
 		(self.x, self.y) = pos
 		self.height = height
 		self.color = color
+		self.ship_image = pygame.image.load('ship1.png')
 
 	def move_left(self):
 		self.x -= 10
@@ -39,7 +42,8 @@ class Player(object):
 			self.x = 480
 		
 	def render(self, display):
-		pygame.draw.rect(display, self.color, pygame.Rect(self.x-self.THICKNESS/2.0, self.y-self.height/2.0, self.THICKNESS, self.height), 3)
+		#pygame.draw.rect(display, self.color, pygame.Rect(self.x-self.THICKNESS/2.0, self.y-self.height/2.0, self.THICKNESS, self.height), 3)
+		display.blit(self.ship_image, (self.x-24, self.y-24))
 
 ###################################
 class Bullet(object):
@@ -58,4 +62,18 @@ class Bullet(object):
 		self.y -= self.vy*delta_t
 	
 	def render(self, display):
-		pygame.draw.rect(display, self.color, pygame.Rect(self.x-self.THICKNESS/2, self.y-self.height/2, self.THICKNESS, self.height), 0)		
+		pygame.draw.rect(display, self.color, pygame.Rect(self.x-self.THICKNESS/2, self.y-self.height/2, self.THICKNESS, self.height), 0)
+
+###################################
+class Life(object):
+	
+	def __init__(self, radius, color, pos):	
+		(self.x, self.y) = pos
+		self.color = color
+		self.radius = radius
+		self.life_image = pygame.image.load('life.png')
+
+	def render(self, display):
+		pos = (int(self.x),int(self.y))
+		#pygame.draw.circle(display, self.color, pos, self.radius, 0)
+		display.blit(self.life_image, (self.x-5, self.y-5))

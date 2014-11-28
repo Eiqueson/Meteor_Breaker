@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from gamelib import SimpleGame
-from elements import Player, Meteor, Bullet
+from elements import Player, Meteor, Bullet, Life
 import random
 
 class MeteorGame(SimpleGame):
@@ -9,6 +9,7 @@ class MeteorGame(SimpleGame):
 	WHITE = pygame.Color('white')
 	COLOR = [pygame.Color('red'), pygame.Color('green'), pygame.Color('blue'), pygame.Color('yellow')]
 	YELLOW = pygame.Color('yellow')
+	RED = pygame.Color('red')
 	SPEED = [100, 150, 200, 250, 300]
 	
 	def __init__(self):
@@ -16,6 +17,9 @@ class MeteorGame(SimpleGame):
 		self.player = Player(color=MeteorGame.WHITE,pos=(self.window_size[0]/2, self.window_size[1]-24))
 		self.meteors = [Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)), hp=3)]
 		self.bullets = []
+		self.lives = [Life(radius=5, color=MeteorGame.RED, pos=(160,20)), Life(radius=5, color=MeteorGame.RED, pos=(140,20)), \
+						Life(radius=5, color=MeteorGame.RED, pos=(120,20)), Life(radius=5, color=MeteorGame.RED, pos=(100,20)), \
+						Life(radius=5, color=MeteorGame.RED, pos=(80,20))]
 		self.score = 0
 		self.life = 5
 	
@@ -32,6 +36,9 @@ class MeteorGame(SimpleGame):
 
 		for bullet in self.bullets:
 			bullet.render(display)
+
+		for life in self.lives:
+			life.render(display)
 
 		display.blit(self.score_image, (360,10))
 		display.blit(self.life_image, (10,10))
@@ -69,6 +76,11 @@ class MeteorGame(SimpleGame):
 				self.meteors.remove(meteor)
 				self.life -= 1
 				self.render_life()
+				self.lives.remove(self.lives[0])
+				if (self.life == 0):
+					print 'Game Over!'
+					print 'Your score = %d' % self.score
+					self.terminate()
 			for bullet in self.bullets:
 				if (meteor.y-24 < bullet.y < meteor.y+24) and (meteor.x-24 < bullet.x < meteor.x+24):
 					self.bullets.remove(bullet)
@@ -79,10 +91,10 @@ class MeteorGame(SimpleGame):
 						self.render_score()
 
 	def render_score(self):
-		self.score_image = self.font.render("Score = %d" % self.score, 0, MeteorGame.WHITE)
+		self.score_image = self.font.render("Score = %d" % self.score, 1, MeteorGame.WHITE)
 
 	def render_life(self):
-		self.life_image = self.font.render("Life = %d" % self.life, 0, MeteorGame.WHITE)
+		self.life_image = self.font.render("Life :", 0, MeteorGame.WHITE)
 
 def main():
 	game = MeteorGame()
