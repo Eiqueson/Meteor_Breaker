@@ -17,10 +17,12 @@ class MeteorGame(SimpleGame):
 		self.meteors = [Meteor(radius=24, color=random.choice(MeteorGame.COLOR), pos=(random.randrange(24,456),-24), speed=(0, random.choice(MeteorGame.SPEED)), hp=3)]
 		self.bullets = []
 		self.score = 0
+		self.life = 5
 	
 	def init(self):
 		super(MeteorGame, self).init()
 		self.render_score()
+		self.render_life()
 
 	def render(self, display):
 		self.player.render(display)
@@ -32,6 +34,7 @@ class MeteorGame(SimpleGame):
 			bullet.render(display)
 
 		display.blit(self.score_image, (360,10))
+		display.blit(self.life_image, (10,10))
 
 	def update(self):
 		if self.is_key_pressed(K_LEFT):
@@ -62,10 +65,10 @@ class MeteorGame(SimpleGame):
 				self.meteors.append(self.newMeteor)
 
 		for meteor in self.meteors:
-			if meteor.y > self.window_size[1]:
+			if (meteor.y > self.window_size[1]) or (((meteor.y+24 > self.player.y-24) and (self.player.y+24 > meteor.y-24))and  (self.player.x-24 < meteor.x < self.player.x+24)):
 				self.meteors.remove(meteor)
-			if ((meteor.y+24 > self.player.y-24) and (self.player.y+24 > meteor.y-24))and  (self.player.x-24 < meteor.x < self.player.x+24):
-				self.meteors.remove(meteor)
+				self.life -= 1
+				self.render_life()
 			for bullet in self.bullets:
 				if (meteor.y-24 < bullet.y < meteor.y+24) and (meteor.x-24 < bullet.x < meteor.x+24):
 					self.bullets.remove(bullet)
@@ -77,6 +80,9 @@ class MeteorGame(SimpleGame):
 
 	def render_score(self):
 		self.score_image = self.font.render("Score = %d" % self.score, 0, MeteorGame.WHITE)
+
+	def render_life(self):
+		self.life_image = self.font.render("Life = %d" % self.life, 0, MeteorGame.WHITE)
 
 def main():
 	game = MeteorGame()
